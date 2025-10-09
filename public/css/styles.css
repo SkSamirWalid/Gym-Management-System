@@ -1,0 +1,255 @@
+/* ====== Gym MS — Global Styles (v2 + badges) ====== */
+
+/* 1) CSS Variables (light theme) */
+:root {
+  --bg: #f8fafc;            /* page background */
+  --surface: #ffffff;        /* cards/nav background */
+  --text: #0f172a;           /* primary text */
+  --muted: #475569;          /* secondary text */
+  --border: #e5e7eb;         /* borders */
+  --primary: #2563eb;
+  --primary-600: #1d4ed8;
+  --danger: #dc2626;
+  --danger-600: #b91c1c;
+  --success: #16a34a;
+  --warn: #d97706;
+
+  --radius: 8px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow: 0 6px 24px rgba(0,0,0,0.08);
+}
+
+/* 2) Dark mode (automatic by system preference; JS toggle available) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1220;
+    --surface: #0f172a;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --border: #1f2937;
+    --primary: #60a5fa;
+    --primary-600: #93c5fd;
+    --danger: #ef4444;
+    --danger-600: #f87171;
+    --success: #22c55e;
+    --warn: #f59e0b;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow: 0 6px 24px rgba(0,0,0,0.35);
+  }
+}
+
+/* 3) Base/Reset */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.45;
+}
+
+img { max-width: 100%; display: block; }
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1, h2, h3 { margin: 16px 0 8px; line-height: 1.25; }
+p { margin: 8px 0; }
+
+/* 4) Layout helpers */
+.container {
+  width: min(100% - 32px, 1100px);
+  margin-inline: auto;
+}
+
+.page {
+  padding: 16px;
+}
+
+/* 5) Top nav */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+nav a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+nav a:hover { background: rgba(0,0,0,0.04); }
+nav .right { margin-left: auto; float: none; }
+
+/* Optional active state (main.js sets this) */
+nav a.active { background: rgba(37, 99, 235, 0.12); color: var(--primary); }
+
+/* 6) Buttons */
+button, .btn {
+  appearance: none;
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  transition: background .15s, border-color .15s, transform .02s;
+}
+button:hover, .btn:hover { background: var(--primary-600); border-color: var(--primary-600); }
+button:active, .btn:active { transform: translateY(1px); }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+button.danger, .btn.danger {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+button.danger:hover, .btn.danger:hover {
+  background: var(--danger-600);
+  border-color: var(--danger-600);
+}
+
+.btn.link, a.btn-link {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--primary);
+  padding: 8px 10px;
+}
+.btn.text, .btn.btn-text {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+}
+
+/* 7) Forms */
+form { margin: 10px 0; }
+label { display: block; margin: 10px 0; color: var(--muted); }
+label > input,
+label > select,
+label > textarea {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+/* 8) Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+thead th {
+  background: rgba(0,0,0,0.03);
+  color: var(--muted);
+  font-weight: 600;
+}
+tbody tr:hover { background: rgba(0,0,0,0.03); }
+
+/* 9) Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 14px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 10) Alerts */
+.error, .success {
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin: 10px 0;
+  border: 1px solid;
+}
+.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+.success {
+  background: #ecfdf5;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+/* 10.5) Badges */
+.badge {
+  display: inline-block;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 6px;
+  margin-left: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--danger);
+  border-radius: 999px;
+  vertical-align: middle;
+  box-shadow: var(--shadow-sm);
+}
+
+/* 11) Utility */
+.flex { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.half { flex: 1 1 380px; }
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 12px; }
+.mt-3 { margin-top: 16px; }
+.small { font-size: 12px; color: var(--muted); }
+
+/* 12) Page headers */
+.page h1 { margin-top: 4px; }
+
+/* 13) Small tweaks for existing markup */
+nav a.right { margin-left: auto; }
+
+/* 14) Print-friendly tables */
+@media print {
+  nav { display: none; }
+  body { background: #fff; color: #000; }
+  table { box-shadow: none; border-color: #ccc; }
+}

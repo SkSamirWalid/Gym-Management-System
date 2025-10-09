@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notifications | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Notifications</h1>
+
+    <form method="POST" action="/notifications/mark-all-read" class="mt-1">
+      <button type="submit" class="btn">Mark all as read</button>
+    </form>
+
+    <div class="card mt-2">
+      <ul style="list-style:none; padding:0; margin:0;">
+        <% if (!notifications || !notifications.length) { %>
+          <li>No notifications yet.</li>
+        <% } else { %>
+          <% notifications.forEach(n => { %>
+            <li style="padding:10px 6px; border-bottom:1px solid var(--border);">
+              <strong>[<%= n.type %>]</strong>
+              <span style="<%= n.is_read ? '' : 'font-weight:bold;' %>"><%= n.message %></span>
+              <small class="small"> — <%= n.created_at %></small>
+              <% if (!n.is_read) { %> <span style="color:var(--success);">(unread)</span> <% } %>
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

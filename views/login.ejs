@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Login</h1>
+
+    <% if (message) { %><div class="success"><%= message %></div><% } %>
+    <% if (error) { %><div class="error"><%= error %></div><% } %>
+
+    <div class="card">
+      <form method="POST" action="/login">
+        <label>
+          Email
+          <input type="email" name="email" value="<%= email || '' %>" required placeholder="you@example.com" autocomplete="email">
+        </label>
+
+        <label>
+          Password
+          <input type="password" name="password" required autocomplete="current-password">
+        </label>
+
+        <div class="mt-2">
+          <button type="submit" class="btn">Login</button>
+          <a class="btn link" href="/register">Create an account</a>
+        </div>
+      </form>
+
+      <% if (notVerified) { %>
+        <p class="small mt-2">
+          Didn’t get the email?
+          <a href="/resend-verification?<%= 'email=' + encodeURIComponent(email || '') %>">Resend verification</a>
+        </p>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

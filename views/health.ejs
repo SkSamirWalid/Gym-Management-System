@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Health | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Health Metrics</h1>
+
+    <div class="card">
+      <form method="POST" action="/health" class="grid">
+        <label>Date
+          <input type="date" name="entry_date">
+        </label>
+        <label>Weight (kg)
+          <input type="number" step="0.1" name="weight_kg">
+        </label>
+        <label>Height (cm)
+          <input type="number" step="0.1" name="height_cm" placeholder="Only needed once">
+        </label>
+        <label>Heart rate (bpm)
+          <input type="number" name="heart_rate_bpm">
+        </label>
+        <label>Calories intake
+          <input type="number" name="calories_intake">
+        </label>
+        <div style="align-self:end;">
+          <button type="submit" class="btn">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <h2 class="mt-2">Progress</h2>
+    <div class="grid">
+      <div class="card">
+        <canvas id="bmiChart" width="400" height="200"></canvas>
+      </div>
+      <div class="card">
+        <canvas id="hrChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Safely embed metrics (escape '<' to avoid breaking out of script)
+    const metrics = JSON.parse('<%- JSON.stringify(metrics || []).replace(/</g, '\\u003c') %>');
+    const labels = metrics.map(m => m.entry_date); // MySQL DATE strings as-is
+    const bmi = metrics.map(m => m.bmi);
+    const hr = metrics.map(m => m.heart_rate_bpm);
+
+    const bmiCtx = document.getElementById('bmiChart');
+    const hrCtx = document.getElementById('hrChart');
+
+    new Chart(bmiCtx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'BMI',
+          data: bmi,
+          borderColor: '#1e88e5',
+          backgroundColor: 'rgba(30,136,229,0.08)',
+          tension: 0.2,
+          spanGaps: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: false } },
+        plugins: { legend: { display: true } }
+      }
+    });
+
+    new Chart(hrCtx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Heart Rate (bpm)',
+          data: hr,
+          borderColor: '#e53935',
+          backgroundColor: 'rgba(229,57,53,0.08)',
+          tension: 0.2,
+          spanGaps: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true } },
+        plugins: { legend: { display: true } }
+      }
+    });
+  </script>
+</body>
+</html>

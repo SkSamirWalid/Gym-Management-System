@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Dashboard</h1>
+
+    <div class="cards">
+      <!-- Membership -->
+      <div class="card">
+        <h2>Membership</h2>
+        <% if (membership) { %>
+          <p><strong>Plan:</strong> <%= membership.plan_name %></p>
+          <p><strong>Status:</strong> <%= membership.status %></p>
+          <p><strong>Start:</strong> <%= membership.start_date %></p>
+          <p><strong>End:</strong> <%= membership.end_date %></p>
+          <% if (membership.status === 'active') { %>
+            <p class="mt-1">Want to extend your membership?
+              <a href="/plans">Choose a plan</a> — it will start after your current one.</p>
+          <% } else if (membership.status === 'pending') { %>
+            <p class="mt-1">You have a pending plan that will activate on <strong><%= membership.start_date %></strong>.</p>
+          <% } %>
+        <% } else { %>
+          <p>No active membership. <a href="/plans">Choose a plan</a>.</p>
+        <% } %>
+      </div>
+
+      <!-- Weekly check-ins -->
+      <div class="card">
+        <h2>This week</h2>
+        <p>Check-ins (last 7 days): <strong><%= weeklyCheckins || 0 %></strong></p>
+        <p class="small">Tip: Aim for 3+ sessions per week for steady progress.</p>
+        <p class="mt-1"><a href="/attendance" class="btn btn-text">Go to Attendance →</a></p>
+      </div>
+
+      <!-- Latest health -->
+      <div class="card">
+        <h2>Latest health</h2>
+        <% if (latestHealth) { %>
+          <p>
+            BMI: <strong><%= latestHealth.bmi || 'N/A' %></strong>,
+            HR: <strong><%= latestHealth.heart_rate_bpm || 'N/A' %></strong> bpm
+          </p>
+          <p class="mt-1">
+            <a href="/health" class="btn btn-text">View charts</a>
+            <span class="small"> • </span>
+            <a href="/tips" class="btn btn-text">Get Tips</a>
+          </p>
+        <% } else { %>
+          <p>No health data yet. <a href="/health">Add today’s metrics</a>.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

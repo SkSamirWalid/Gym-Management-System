@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin • <%= mode==='new' ? 'New' : 'Edit' %> Plan | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1><%= mode==='new' ? 'Add New' : 'Edit' %> Plan</h1>
+
+    <% if (error) { %><div class="error"><%= error %></div><% } %>
+
+    <form method="POST" action="<%= mode==='new' ? '/admin/plans/new' : '/admin/plans/' + plan.id + '/edit' %>">
+      <label>
+        Name
+        <input type="text" name="name" value="<%= plan.name || '' %>" required maxlength="100" placeholder="e.g., Basic (30 days)">
+      </label>
+
+      <label>
+        Duration (days)
+        <input type="number" name="duration_days" value="<%= plan.duration_days || '' %>" min="1" step="1" required>
+      </label>
+
+      <label>
+        Price ($)
+        <input type="number" name="price" value="<%= (plan.price !== undefined && plan.price !== null) ? plan.price : '' %>" step="0.01" min="0" placeholder="0.00">
+      </label>
+
+      <label>
+        Description
+        <textarea name="description" rows="3" placeholder="Optional"><%= plan.description || '' %></textarea>
+      </label>
+
+      <div class="flex mt-2">
+        <button type="submit" class="btn"><%= mode==='new' ? 'Create' : 'Update' %></button>
+        <a class="btn link" href="/admin/plans">Cancel</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

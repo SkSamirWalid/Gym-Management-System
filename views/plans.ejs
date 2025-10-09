@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Membership Plans | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Membership Plans</h1>
+
+    <% if (message) { %><div class="success"><%= message %></div><% } %>
+    <% if (error) { %><div class="error"><%= error %></div><% } %>
+
+    <div class="cards mt-2">
+      <% if (!plans || !plans.length) { %>
+        <div class="card">No plans available yet.</div>
+      <% } %>
+      <% plans.forEach(p => { %>
+        <div class="card">
+          <h3 style="margin-top:0;"><%= p.name %></h3>
+          <p class="small">Duration: <strong><%= p.duration_days %></strong> days</p>
+          <p class="small">Price: <strong>$<%= p.price %></strong></p>
+          <% if (p.description) { %><p><%= p.description %></p><% } %>
+          <form method="POST" action="/subscribe" class="mt-1">
+            <input type="hidden" name="plan_id" value="<%= p.id %>">
+            <button type="submit" class="btn">Choose</button>
+          </form>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>

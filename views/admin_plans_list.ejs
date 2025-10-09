@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin • Plans | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Admin • Membership Plans</h1>
+
+    <% if (msg) { %><div class="success"><%= msg %></div><% } %>
+
+    <p class="mt-1">
+      <a class="btn" href="/admin/plans/new">+ Add New Plan</a>
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Duration (days)</th><th>Price</th><th>Description</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!plans || !plans.length) { %>
+          <tr><td colspan="6">No plans yet.</td></tr>
+        <% } %>
+        <% plans.forEach(p => { %>
+          <tr>
+            <td><%= p.id %></td>
+            <td><%= p.name %></td>
+            <td><%= p.duration_days %></td>
+            <td>$<%= p.price %></td>
+            <td><%= p.description || '' %></td>
+            <td>
+              <a class="btn btn-text" href="/admin/plans/<%= p.id %>/edit">Edit</a>
+              <form method="POST" action="/admin/plans/<%= p.id %>/delete" style="display:inline;" data-confirm="Delete this plan?">
+                <button type="submit" class="btn danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

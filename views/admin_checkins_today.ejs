@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin • Today’s Check-ins | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Admin • Today’s Check-ins</h1>
+    <p class="small mt-1">
+      Showing <strong><%= (items && items.length) || 0 %></strong> check-ins today.
+      <a class="btn link" href="/admin/dashboard">Back to Dashboard</a>
+    </p>
+
+    <table class="mt-2">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Email</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Duration</th>
+          <th>Method</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!items || !items.length) { %>
+          <tr><td colspan="6">No check-ins yet today.</td></tr>
+        <% } %>
+        <% (items || []).forEach(r => { %>
+          <tr>
+            <td><%= r.name %></td>
+            <td><a href="/admin/users?q=<%= encodeURIComponent(r.email) %>"><%= r.email %></a></td>
+            <td class="ci" data-dt="<%= r.check_in %>"><%= r.check_in %></td>
+            <td class="co" data-dt="<%= r.check_out || '' %>"><%= r.check_out || '-' %></td>
+            <td class="dur">—</td>
+            <td><%= r.method %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    (function () {
+      function parseLocal(s) {
+        if (!s) return null;
+        const isoLocal = s.replace(' ', 'T'); // "YYYY-MM-DDTHH:mm:ss"
+        const d = new Date(isoLocal);
+        return isNaN(d) ? null : d;
+      }
+      function fmtDuration(ms) {
+        if (!ms || ms <= 0) return '—';
+        const totalM = Math.round(ms / 60000);
+        const h = Math.floor(totalM / 60);
+        const m = totalM % 60;
+        return h > 0 ? `${h}h ${m}m` : `${m}m`;
+      }
+      document.querySelectorAll('tbody tr').forEach(tr => {
+        const ciCell = tr.querySelector('.ci');
+        const coCell = tr.querySelector('.co');
+        const durCell = tr.querySelector('.dur');
+        if (!ciCell || !coCell || !durCell) return;
+        const ci = parseLocal(ciCell.getAttribute('data-dt'));
+        const co = parseLocal(coCell.getAttribute('data-dt'));
+        durCell.textContent = (ci && co) ? fmtDuration(co - ci) : '—';
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin • Expiring Memberships (7 days) | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Admin • Expiring Memberships (7 days)</h1>
+    <p class="small mt-1">
+      Showing <strong><%= (items && items.length) || 0 %></strong> memberships expiring within 7 days.
+      <a class="btn link" href="/admin/dashboard">Back to Dashboard</a>
+      <a class="btn link" href="/admin/memberships/active">View all active →</a>
+    </p>
+
+    <table class="mt-2">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Email</th>
+          <th>Plan</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!items || !items.length) { %>
+          <tr><td colspan="6">No memberships expiring in the next 7 days.</td></tr>
+        <% } %>
+        <% (items || []).forEach(r => { %>
+          <tr>
+            <td><%= r.name %></td>
+            <td><a href="/admin/users?q=<%= encodeURIComponent(r.email) %>"><%= r.email %></a></td>
+            <td><%= r.plan_name %></td>
+            <td><%= r.start_date %></td>
+            <td><%= r.end_date %></td>
+            <td><%= r.status %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

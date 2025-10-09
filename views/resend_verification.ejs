@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Resend Verification | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Resend Verification Email</h1>
+
+    <% if (message) { %><div class="success"><%= message %></div><% } %>
+    <% if (error) { %><div class="error"><%= error %></div><% } %>
+
+    <div class="card">
+      <form method="POST" action="/resend-verification">
+        <label>
+          Email
+          <input type="email" name="email" value="<%= email || '' %>" required placeholder="you@example.com" autocomplete="email">
+        </label>
+
+        <div class="mt-2">
+          <button type="submit" class="btn">Send verification link</button>
+          <a class="btn link" href="/login">Back to Login</a>
+        </div>
+      </form>
+
+      <p class="small mt-1">
+        We’ll send a fresh verification link if your account exists and isn’t verified yet.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

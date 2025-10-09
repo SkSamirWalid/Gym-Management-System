@@ -1,0 +1,32 @@
+<nav>
+  <% if (user) { %>
+    <!-- Common -->
+    <a href="/dashboard">Member Dashboard</a>
+    <a href="/notifications">
+      Notifications
+      <% if (typeof unreadCount !== 'undefined' && Number(unreadCount) > 0) { %>
+        <span class="badge"><%= unreadCount %></span>
+      <% } %>
+    </a>
+
+    <% if (user.role === 'admin') { %>
+      <!-- Admin-only -->
+      <a href="/admin/dashboard">Admin Dashboard</a>
+      <a href="/admin/plans">Admin • Plans</a>
+      <a href="/admin/users">Admin • Users</a>
+      <a href="/admin/run-daily" data-confirm="Run daily tasks now?">Run daily</a>
+    <% } else { %>
+      <!-- Member-only -->
+      <a href="/profile">Profile</a>
+      <a href="/plans">Plans</a>
+      <a href="/attendance">Attendance</a>
+      <a href="/health">Health</a>
+      <a href="/tips">Tips</a>
+    <% } %>
+
+    <a class="right" href="/logout">Logout</a>
+  <% } else { %>
+    <a href="/login">Login</a>
+    <a class="right" href="/register">Register</a>
+  <% } %>
+</nav>

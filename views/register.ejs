@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Create your account</h1>
+
+    <% if (errors && errors.length) { %>
+      <div class="error">
+        <ul style="margin:0; padding-left:18px;">
+          <% errors.forEach(e => { %>
+            <li><%= e.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <div class="card">
+      <form method="POST" action="/register">
+        <label>
+          Name
+          <input type="text" name="name" value="<%= (data && data.name) || '' %>" required maxlength="100" placeholder="Your full name">
+        </label>
+
+        <label>
+          Email
+          <input type="email" name="email" value="<%= (data && data.email) || '' %>" required placeholder="you@example.com">
+        </label>
+
+        <label>
+          Password
+          <input type="password" name="password" required minlength="6" placeholder="At least 6 characters">
+        </label>
+
+        <div class="mt-2">
+          <button type="submit" class="btn">Register</button>
+          <a class="btn link" href="/login">Already have an account? Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

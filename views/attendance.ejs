@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attendance | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Attendance</h1>
+
+    <div class="card">
+      <% if (openEntry) { %>
+        <form method="POST" action="/attendance/checkout" style="display:inline;">
+          <button type="submit" class="btn danger">Check Out</button>
+        </form>
+        <span class="small">Checked in at: <strong><%= openEntry.check_in %></strong></span>
+      <% } else { %>
+        <form method="POST" action="/attendance/checkin" style="display:inline;">
+          <button type="submit" class="btn">Check In</button>
+        </form>
+      <% } %>
+    </div>
+
+    <h2 class="mt-2">History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Duration</th>
+          <th>Method</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% entries.forEach(e => { %>
+          <tr>
+            <td class="ci" data-dt="<%= e.check_in %>"><%= e.check_in %></td>
+            <td class="co" data-dt="<%= e.check_out || '' %>"><%= e.check_out || '-' %></td>
+            <td class="dur">—</td>
+            <td><%= e.method %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    (function () {
+      function parseLocal(s) {
+        if (!s) return null;
+        // Expect "YYYY-MM-DD HH:mm:ss" from MySQL; make it "YYYY-MM-DDTHH:mm:ss" (local)
+        const isoLocal = s.replace(' ', 'T');
+        const d = new Date(isoLocal);
+        return isNaN(d) ? null : d;
+      }
+      function fmtDuration(ms) {
+        if (ms <= 0) return '—';
+        const totalM = Math.round(ms / 60000); // round to nearest min
+        const h = Math.floor(totalM / 60);
+        const m = totalM % 60;
+        if (h > 0) return `${h}h ${m}m`;
+        return `${m}m`;
+      }
+      document.querySelectorAll('tbody tr').forEach(tr => {
+        const ciCell = tr.querySelector('.ci');
+        const coCell = tr.querySelector('.co');
+        const durCell = tr.querySelector('.dur');
+        if (!ciCell || !coCell || !durCell) return;
+
+        const ci = parseLocal(ciCell.getAttribute('data-dt'));
+        const coRaw = coCell.getAttribute('data-dt') || '';
+        const co = parseLocal(coRaw);
+
+        if (ci && co) {
+          const ms = co - ci;
+          durCell.textContent = fmtDuration(ms);
+        } else {
+          durCell.textContent = '—';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Verification | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Email Verification</h1>
+
+    <% if (ok) { %>
+      <div class="success"><%= message || 'Email verified successfully.' %></div>
+      <p class="mt-1">
+        <a href="/login" class="btn">Go to Login</a>
+      </p>
+    <% } else { %>
+      <div class="error"><%= message || 'Verification failed. The link may be invalid or expired.' %></div>
+      <p class="mt-1">
+        <a href="/login" class="btn">Back to Login</a>
+        <a href="/resend-verification" class="btn link">Resend verification</a>
+      </p>
+    <% } %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Profile</h1>
+
+    <% if (message) { %><div class="success"><%= message %></div><% } %>
+    <% if (error) { %><div class="error"><%= error %></div><% } %>
+
+    <div class="card">
+      <form method="POST" action="/profile">
+        <label>
+          Name
+          <input type="text" name="name" value="<%= userProfile.name %>" required maxlength="100" placeholder="Your full name">
+        </label>
+
+        <label>
+          Phone
+          <input type="tel" name="phone" value="<%= userProfile.phone || '' %>" placeholder="+1 555 123 4567">
+        </label>
+
+        <label>
+          Gender
+          <select name="gender">
+            <option value="">--</option>
+            <option value="male" <%= userProfile.gender==='male'?'selected':'' %>>Male</option>
+            <option value="female" <%= userProfile.gender==='female'?'selected':'' %>>Female</option>
+            <option value="other" <%= userProfile.gender==='other'?'selected':'' %>>Other</option>
+          </select>
+        </label>
+
+        <label>
+          DOB
+          <input type="date" name="date_of_birth" value="<%= userProfile.date_of_birth || '' %>">
+        </label>
+
+        <div class="mt-2">
+          <button type="submit" class="btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

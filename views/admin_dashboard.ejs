@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin • Dashboard | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <style>
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .muted { color: var(--muted); font-size: 12px; }
+    .kpi-link { text-decoration: none; color: inherit; }
+  </style>
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Admin • Dashboard</h1>
+
+    <div class="cards">
+      <!-- Members (already clickable) -->
+      <a href="/admin/users?role=member" class="kpi-link">
+        <div class="kpi">
+          <div>Members</div>
+          <div style="font-size:22px;"><strong><%= stats.members %></strong></div>
+          <div class="muted">View members</div>
+        </div>
+      </a>
+
+      <!-- Active Memberships (clickable) -->
+      <a href="/admin/memberships/active" class="kpi-link">
+        <div class="kpi">
+          <div>Active Memberships</div>
+          <div style="font-size:22px;"><strong><%= stats.active_memberships %></strong></div>
+          <div class="muted">View active</div>
+        </div>
+      </a>
+
+      <!-- Expiring 7 days (clickable) -->
+      <a href="/admin/memberships/expiring" class="kpi-link">
+        <div class="kpi">
+          <div>Expiring (7 days)</div>
+          <div style="font-size:22px;"><strong><%= stats.expiring_7d %></strong></div>
+          <div class="muted">View expiring</div>
+        </div>
+      </a>
+
+      <!-- Check-ins Today (clickable) -->
+      <a href="/admin/checkins/today" class="kpi-link">
+        <div class="kpi">
+          <div>Check-ins Today</div>
+          <div style="font-size:22px;"><strong><%= stats.checkins_today %></strong></div>
+          <div class="muted">View today</div>
+        </div>
+      </a>
+
+      <!-- Revenue (kept as non-clickable for now) -->
+      <div class="kpi">
+        <div>Revenue (30d)</div>
+        <div style="font-size:22px;"><strong>$<%= stats.revenue_30d %></strong></div>
+      </div>
+    </div>
+
+    <div class="flex" style="margin-top:16px;">
+      <div class="half">
+        <h3>Top Members (last 30 days)</h3>
+        <table>
+          <thead><tr><th>Name</th><th>Visits</th></tr></thead>
+          <tbody>
+            <% if (!topMembers.length) { %>
+              <tr><td colspan="2">No data.</td></tr>
+            <% } %>
+            <% topMembers.forEach(r => { %>
+              <tr><td><%= r.name %></td><td><%= r.visits %></td></tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="half">
+        <h3>Upcoming Expiries (7 days)</h3>
+        <table>
+          <thead><tr><th>Member</th><th>Plan</th><th>End Date</th></tr></thead>
+          <tbody>
+            <% if (!upcomingExpiries.length) { %>
+              <tr><td colspan="3">No upcoming expiries.</td></tr>
+            <% } %>
+            <% upcomingExpiries.forEach(r => { %>
+              <tr><td><%= r.name %></td><td><%= r.plan_name %></td><td><%= r.end_date %></td></tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="half">
+        <h3>Latest Members</h3>
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Joined</th></tr></thead>
+          <tbody>
+            <% if (!latestMembers || !latestMembers.length) { %>
+              <tr><td colspan="4">No members yet.</td></tr>
+            <% } %>
+            <% latestMembers.forEach(m => { %>
+              <tr>
+                <td><a href="/admin/users?q=<%= encodeURIComponent(m.email) %>"><%= m.name %></a></td>
+                <td><%= m.email %></td>
+                <td><%= m.is_active ? 'Active' : 'Inactive' %></td>
+                <td><%= m.created_at %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <p class="muted mt-1"><a href="/admin/users?role=member">View all members →</a></p>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <h3>Export Attendance (CSV)</h3>
+      <form method="GET" action="/admin/export/attendance.csv" class="flex" style="align-items:flex-end;">
+        <label>From <input type="date" name="from" required></label>
+        <label>To <input type="date" name="to" required></label>
+        <button type="submit" class="btn">Download CSV</button>
+      </form>
+      <p>Or quick export: <a href="/admin/export/attendance.csv">Last 30 days</a></p>
+    </div>
+  </div>
+</body>
+</html>

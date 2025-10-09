@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin • Users | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Admin • Users</h1>
+
+    <% if (msg) { %><div class="success"><%= msg %></div><% } %>
+
+    <form method="GET" action="/admin/users" class="flex" style="align-items:flex-end;">
+      <label>
+        Search
+        <input type="text" name="q" placeholder="name or email" value="<%= q || '' %>">
+      </label>
+      <label>
+        Status
+        <select name="status">
+          <option value="all" <%= status==='all'?'selected':'' %>>All</option>
+          <option value="active" <%= status==='active'?'selected':'' %>>Active</option>
+          <option value="inactive" <%= status==='inactive'?'selected':'' %>>Inactive</option>
+        </select>
+      </label>
+      <label>
+        Role
+        <select name="role">
+          <option value="all" <%= role==='all'?'selected':'' %>>All</option>
+          <option value="member" <%= role==='member'?'selected':'' %>>Member</option>
+          <option value="admin" <%= role==='admin'?'selected':'' %>>Admin</option>
+        </select>
+      </label>
+      <button type="submit" class="btn">Filter</button>
+    </form>
+
+    <table class="mt-2">
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Phone</th><th>Status</th><th>Created</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!users || !users.length) { %>
+          <tr><td colspan="8">No users found.</td></tr>
+        <% } %>
+        <% users.forEach(u => { %>
+          <tr>
+            <td><%= u.id %></td>
+            <td><%= u.name %></td>
+            <td><%= u.email %></td>
+            <td><%= u.role %></td>
+            <td><%= u.phone || '' %></td>
+            <td><%= u.is_active ? 'Active' : 'Inactive' %></td>
+            <td><%= u.created_at %></td>
+            <td>
+              <% if (u.role === 'member') { %>
+                <% if (u.is_active) { %>
+                  <form method="POST" action="/admin/users/<%= u.id %>/deactivate" style="display:inline;" data-confirm="Deactivate this user?">
+                    <button type="submit" class="btn danger">Deactivate</button>
+                  </form>
+                <% } else { %>
+                  <form method="POST" action="/admin/users/<%= u.id %>/reactivate" style="display:inline;">
+                    <button type="submit" class="btn">Reactivate</button>
+                  </form>
+                <% } %>
+              <% } else { %>
+                —
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

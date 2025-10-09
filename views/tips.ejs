@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tips | Gym</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="page container">
+    <h1>Personalized Tips</h1>
+
+    <div class="card">
+      <% if (!tips || !tips.length) { %>
+        <p>No tips yet. Add your health metrics and attend sessions to personalize your recommendations.</p>
+      <% } else { %>
+        <ul style="margin:0; padding-left:18px;">
+          <% tips.forEach(t => { %>
+            <li style="margin:6px 0;"><%= t %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
